@@ -1,0 +1,86 @@
+# !/usr/bin/env bash
+# -*- coding: utf-8 -*-
+
+which brew > /dev/null
+if [ $? -ne 0 ];
+then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+which hugo > /dev/null
+if [ $? -ne 0 ];
+then
+    brew install hugo
+fi
+
+hugo version > /dev/null
+if [ $? -ne 0 ];
+then
+    ecoh hugo install failed!
+    exit -1
+fi
+
+read -p "Please input a site name you will create: " site_name
+
+
+if [ -z "site_name" ];
+then
+    echo the site name is empty!!!
+    exit -1
+fi
+
+if [ -d $site_name ];
+then
+    read -p "$site_name exist, would you delete it? " i
+    case $i in
+        y|Y|yes|Yes)
+            rm -rf $site_name
+            ;;
+        *)
+            exit 0
+            ;;
+    esac
+fi
+
+hugo new site "$site_name"
+
+git version > /dev/null
+if [ $? -ne 0 ];
+then
+    brew install git
+fi
+
+cd $site_name
+
+# Download the theme
+git init
+git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke
+# Note for non-git users:
+#   - If you do not have git installed, you can download the archive of the latest
+#     version of this theme from:
+#       https://github.com/budparr/gohugo-theme-ananke/archive/master.zip
+#   - Extract that .zip file to get a "gohugo-theme-ananke-master" directory.
+#   - Rename that directory to "ananke", and move it into the "themes/" directory.
+# End of note for non-git users.
+
+# Edit your config.toml configuration file
+# and add the Ananke theme.
+cat > config.toml <<EOF
+baseURL = "https://example.org/"
+languageCode = "en-us"
+title = "My New Hugo Site"
+theme = "ananke"
+EOF
+
+hugo new posts/my-first-post.md
+
+
+cat > content/posts/my-first-post.md <<EOF
+---
+title: "My First Post"
+date: 2019-03-26T08:47:11+01:00
+draft: true
+---
+EOF
+
+hugo server -D
