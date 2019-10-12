@@ -13,7 +13,7 @@ $ ./create-site
 or
 
 ```bash
-eval "curl -sL https://raw.githubusercontent.com/OrzGeeker/OrzHugo/master/create-site"
+eval "$(curl -sL https://raw.githubusercontent.com/OrzGeeker/OrzHugo/master/create-site)"
 ```
 
 [HUGO](https://gohugo.io)
