@@ -57,7 +57,7 @@ git init
 git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke
 git submodule add https://github.com/onweru/hugo-swift-theme.git themes/swift
 git submodule add https://github.com/vimux/binario themes/binario
-git submodule add https://github.com/matcornic/hugo-theme-learn.git
+git submodule add https://github.com/matcornic/hugo-theme-learn.git themes/learn
 # Note for non-git users:
 #   - If you do not have git installed, you can download the archive of the latest
 #     version of this theme from:
