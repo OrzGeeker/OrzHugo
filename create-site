@@ -58,6 +58,7 @@ git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/anan
 git submodule add https://github.com/onweru/hugo-swift-theme.git themes/swift
 git submodule add https://github.com/vimux/binario themes/binario
 git submodule add https://github.com/matcornic/hugo-theme-learn.git themes/learn
+git submodule add https://github.com/g1eny0ung/hugo-theme-dream.git themes/dream
 # Note for non-git users:
 #   - If you do not have git installed, you can download the archive of the latest
 #     version of this theme from:
@@ -76,6 +77,7 @@ theme = "ananke"
 # theme = "swift"
 # theme = "binario"
 # theme = "learn"
+# theme = "dream"
 EOF
 
 hugo new posts/my-first-post.md
