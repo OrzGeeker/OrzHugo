@@ -20,10 +20,37 @@ then
     exit -1
 fi
 
+read -p "Please input a project name: " project_name
+
+if [ -z "$project_name" ];
+then
+    echo the project name is empty!!!
+    exit -1
+fi
+
+if [ -d $project_name ];
+then
+    read -p "$project_name exist, would you overwrite it? " i
+    case $i in
+        y|Y|yes|Yes)
+            rm -rf $project_name
+            ;;
+        *)
+            echo "$project_name exist, not modify"
+            exit -2
+            ;;
+    esac
+fi
+
+mkdir -p $project_name
+
+cd $project_name
+
+git init
+
 read -p "Please input a site name you will create: " site_name
 
-
-if [ -z "site_name" ];
+if [ -z "$site_name" ];
 then
     echo the site name is empty!!!
     exit -1
@@ -31,7 +58,7 @@ fi
 
 if [ -d $site_name ];
 then
-    read -p "$site_name exist, would you delete it? " i
+    read -p "$site_name exist, would you overwrite it? " i
     case $i in
         y|Y|yes|Yes)
             rm -rf $site_name
@@ -88,17 +115,82 @@ then
     exit -3
 fi
 
-git init
 theme_dir="themes/$theme_option"
 git submodule add $theme_url $theme_dir
 
+read -p "Please select a url for this site if you have a domain: " base_url
+
+if [ -z "$base_url" ];
+then
+    base_url="https://example.org"
+fi
+
 cat > config.toml <<EOF
-baseURL = "https://example.org/"
+baseURL = "$base_url"
 languageCode = "en-us"
 title = "$site_name"
 theme = "$theme_option"
 EOF
 
-hugo new post_demo.md
+cd ..
 
-hugo server -D
+publish_script_name="publish_site.sh"
+preview_script_name="preview_site.sh"
+
+cat > $publish_script_name << EOF
+# !/usr/bin/env bash
+# -*- coding: utf-8 -*-
+
+if [ "\`git status -s\`" ]
+then
+    echo "The working directory is dirty. Please commit any pending changes."
+    exit 1;
+fi
+
+SITE_ROOT="$site_name"
+SITE_PUB_DIR="\${SITE_ROOT}/public"
+SITE_CONTENT_DIR="\${SITE_ROOT}/content"
+SITE_THEME_DIR="\${SITE_ROOT}/themes"
+
+echo "Deleting old publication"
+rm -rf \${SITE_PUB_DIR}
+mkdir \${SITE_PUB_DIR}
+git worktree prune
+rm -rf .git/worktrees/\${SITE_PUB_DIR}
+
+echo "Checking out gh-pages branch into public"
+git worktree add -B gh-pages\${SITE_PUB_DIR} origin/gh-pages
+
+echo "Removing existing files"
+rm -rf \${SITE_PUB_DIR}/*
+
+echo "\$base_url" > \${SITE_PUB_DIR}/CNAME
+
+echo "Generating site"
+hugo -s "\${SITE_ROOT}" -e production
+
+echo "Updating gh-pages branch"
+cd \${SITE_PUB_DIR} && git add --all && git commit -m "Publishing to gh-pages (publish.sh)"
+
+echo "Pushing to github"
+cd - 
+git push --all
+
+EOF
+
+cat > $preview_script_name << EOF
+#!/usr/bin/env bash
+#-*- utf-8 -*-
+
+open http://localhost:1313 && hugo -s $site_name server -D
+EOF
+
+sudo chmod u+x $publish_script_name $preview_script_name
+
+cat > .gitignore <<EOF
+.DS_Store
+EOF
+
+hugo -s $site_name new  post_demo.md
+
+hugo -s $site_name server  -D
