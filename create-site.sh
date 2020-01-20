@@ -182,7 +182,8 @@ cat > $preview_script_name << EOF
 #!/usr/bin/env bash
 #-*- utf-8 -*-
 
-open http://localhost:1313 && hugo -s $site_name server -D
+open http://localhost:1313 && hugo -s $site_name server -D --disableFastRender
+
 EOF
 
 sudo chmod u+x $publish_script_name $preview_script_name
