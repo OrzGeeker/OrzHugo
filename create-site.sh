@@ -182,7 +182,10 @@ cat > $preview_script_name << EOF
 #!/usr/bin/env bash
 #-*- utf-8 -*-
 
-open http://localhost:1313 && hugo -s $site_name server -D
+pkill -9 hugo
+hugo -s $site_name server -D &
+sleep 2s
+open http://localhost:1313
 
 EOF
 
