@@ -111,11 +111,13 @@ done
 theme_dir="themes/$theme_option"
 git submodule add $theme_url $theme_dir
 
-read -p "Please select a url for this site if you have a domain: " base_url
+read -p "Please config a domain for this site: " domain
 
-if [ -z "$base_url" ];
+if [ -z "$domain" ];
 then
     base_url="https://example.org"
+else
+    base_url="https://${domain}"
 fi
 
 cat > config.toml <<EOF
@@ -156,7 +158,7 @@ git worktree add \${SITE_PUB_DIR} -B gh-pages
 echo "Removing existing files"
 rm -rf \${SITE_PUB_DIR}/*
 
-echo "$base_url" > \${SITE_PUB_DIR}/CNAME
+echo "$domain" > \${SITE_PUB_DIR}/CNAME
 
 echo "Generating site"
 hugo -s "\${SITE_ROOT}" -e production
