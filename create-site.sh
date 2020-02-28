@@ -94,7 +94,7 @@ do
             theme_url="https://github.com/onweru/hugo-swift-theme.git"
             break;;
         "binario")
-            theme_url="https://github.com/vimux/binario"
+            theme_url="https://github.com/Vimux/Binario.git"
             break;;
         "learn")
             theme_url="https://github.com/matcornic/hugo-theme-learn.git"
@@ -107,16 +107,6 @@ do
             break;;
     esac
 done
-
-url_exp_pattern="^[a-zA-z]+://[^\s]*$"
-
-echo $theme_url | grep -oE $url_exp_pattern
-
-if [ $? -ne 0 ];
-then
-    echo "$theme_url is not a valid link"
-    exit -3
-fi
 
 theme_dir="themes/$theme_option"
 git submodule add $theme_url $theme_dir
@@ -201,4 +191,8 @@ EOF
 
 hugo -s $site_name new  post_demo.md
 
-hugo -s $site_name server  -D
+pkill -9 hugo
+hugo -s $site_name server  -D &
+sleep 2s
+open http://localhost:1313
+
