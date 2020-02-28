@@ -84,7 +84,7 @@ echo
 echo
 
 PS3="select a theme for site $site_name: "
-select theme_option in "ananke" "swift" "binario" "learn" "dream"
+select theme_option in "ananke" "swift" "binario" "learn" "dream" "personal"
 do
     case $theme_option in 
         "ananke")
@@ -101,6 +101,9 @@ do
             break;;
         "dream")
             theme_url="https://github.com/g1eny0ung/hugo-theme-dream.git"
+            break;;
+        "personal")
+            theme_url="https://github.com/bjacquemet/personal-web.git"
             break;;
     esac
 done
