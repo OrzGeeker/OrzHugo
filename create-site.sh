@@ -175,6 +175,7 @@ cd \${SITE_PUB_DIR} && echo "\$base_url" > \${SITE_PUB_DIR}/CNAME && git add --a
 echo "Pushing to github"
 cd - 
 git push --all
+open "http://\$base_url"
 
 EOF
 
