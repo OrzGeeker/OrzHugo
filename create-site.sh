@@ -166,7 +166,7 @@ cd \${SITE_PUB_DIR} && git add --all && git commit -m "Publishing to gh-pages (p
 
 echo "Pushing to github"
 cd - 
-git push --all
+git push -uf --all
 open "http://$base_url"
 
 EOF
