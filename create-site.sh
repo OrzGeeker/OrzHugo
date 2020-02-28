@@ -186,7 +186,7 @@ sudo chmod u+x $publish_script_name $preview_script_name
 
 cat > .gitignore <<EOF
 .DS_Store
-\${site_name}
+"\${site_name}"
 EOF
 
 hugo -s $site_name new  post_demo.md
