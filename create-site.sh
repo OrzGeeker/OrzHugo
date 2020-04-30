@@ -178,7 +178,7 @@ cat > $preview_script_name << EOF
 #-*- utf-8 -*-
 
 pkill -9 hugo
-hugo -s $site_name server -D &
+hugo -s $site_name server -D --bind "0.0.0.0" &
 sleep 2s
 open http://localhost:1313
 
